@@ -1,0 +1,21 @@
+from user2 import app
+
+# Fixture for test client
+@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    client = app.test_client()
+    yield client
+
+# Test cases for users.py
+def test_users_index(client):
+    response = client.get('/users')
+    assert response.status_code == 200
+
+def test_users_new_form(client):
+    response = client.get('/users/new')
+    assert response.status_code == 200
+
+def test_users_new(client):
+    response = client.post('/users/new', data={'first_name': 'John', 'last_name': 'Doe'})
+    assert response.status_code == 302  # Redirect after adding a new user
